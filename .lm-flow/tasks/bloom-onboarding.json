@@ -1,0 +1,38 @@
+{
+  "feature": "bloom-onboarding",
+  "spec": "specs/001-bloom-onboarding/spec.md",
+  "plan": "specs/001-bloom-onboarding/plan.md",
+  "tasks_md": "specs/001-bloom-onboarding/tasks.md",
+  "phases": [
+    {
+      "name": "Phase 1 — Foundation",
+      "tasks": [
+        {"id": "T1", "title": "Project scaffold + Swift Package",          "acceptance": "swift build succeeds from bloom-ios/. Package.swift declares iOS(.v16) and a Bloom library product.", "files": ["bloom-ios/Package.swift", "bloom-ios/README.md"], "depends_on": [], "size": "s"},
+        {"id": "T2", "title": "Design tokens (colors)",                    "acceptance": "BloomColor provides light + dark variants for the 13 palette tokens. Preview shows palette grid.", "files": ["bloom-ios/Sources/Bloom/DesignSystem/BloomColor.swift"], "depends_on": ["T1"], "size": "s"},
+        {"id": "T3", "title": "Design tokens (typography, spacing, radii, shadows)", "acceptance": "BloomFont, BloomSpacing, BloomRadius, BloomShadow all exposed with the spec values.", "files": ["bloom-ios/Sources/Bloom/DesignSystem/BloomFont.swift","bloom-ios/Sources/Bloom/DesignSystem/BloomSpacing.swift","bloom-ios/Sources/Bloom/DesignSystem/BloomRadius.swift","bloom-ios/Sources/Bloom/DesignSystem/BloomShadow.swift"], "depends_on": ["T1"], "size": "s"},
+        {"id": "T4", "title": "Primitive components: BloomButton, BloomCard",         "acceptance": "Both have variants and tap-feedback. Each has a preview.", "files": ["bloom-ios/Sources/Bloom/Components/BloomButton.swift","bloom-ios/Sources/Bloom/Components/BloomCard.swift"], "depends_on": ["T2","T3"], "size": "m"},
+        {"id": "T5", "title": "Primitive components: pills, progress, wheel, illustration", "acceptance": "StagePill, TopicPill, ProgressBar, WheelPicker, IllustrationView render with previews.", "files": ["bloom-ios/Sources/Bloom/Components/StagePill.swift","bloom-ios/Sources/Bloom/Components/TopicPill.swift","bloom-ios/Sources/Bloom/Components/ProgressBar.swift","bloom-ios/Sources/Bloom/Components/WheelPicker.swift","bloom-ios/Sources/Bloom/Components/IllustrationView.swift"], "depends_on": ["T2","T3"], "size": "m"}
+      ]
+    },
+    {
+      "name": "Phase 2 — Onboarding flow",
+      "tasks": [
+        {"id": "T6",  "title": "Models + store",            "acceptance": "UserStage enum, OnboardingState Codable, OnboardingStore ObservableObject with @AppStorage persistence and stage→topic recommendation.", "files": ["bloom-ios/Sources/Bloom/Models/UserStage.swift","bloom-ios/Sources/Bloom/Models/OnboardingState.swift","bloom-ios/Sources/Bloom/Models/OnboardingStore.swift"], "depends_on": ["T1"], "size": "m"},
+        {"id": "T7",  "title": "WelcomeView",               "acceptance": "Renders wordmark + tagline + Get started. Tap advances. Light + dark previews.", "files": ["bloom-ios/Sources/Bloom/Onboarding/WelcomeView.swift"], "depends_on": ["T4","T6"], "size": "s"},
+        {"id": "T8",  "title": "StageSelectorView",         "acceptance": "5 multi-select stage cards; Continue disabled until ≥1 selected.", "files": ["bloom-ios/Sources/Bloom/Onboarding/StageSelectorView.swift"], "depends_on": ["T4","T5","T6"], "size": "m"},
+        {"id": "T9",  "title": "PersonalizationView",       "acceptance": "Adapts to selected stages; pregnant→week wheel + due date; postnatal→child age; TTC-only is skipped by coordinator.", "files": ["bloom-ios/Sources/Bloom/Onboarding/PersonalizationView.swift"], "depends_on": ["T5","T6"], "size": "m"},
+        {"id": "T10", "title": "TopicsView",                "acceptance": "18+ topic chips, flow-wrap, 3-5 pre-selected by stage.", "files": ["bloom-ios/Sources/Bloom/Onboarding/TopicsView.swift"], "depends_on": ["T5","T6"], "size": "m"},
+        {"id": "T11", "title": "PrivacyView",               "acceptance": "Three promise cards; Start my journey CTA flips onboarding.completed.", "files": ["bloom-ios/Sources/Bloom/Onboarding/PrivacyView.swift"], "depends_on": ["T4","T6"], "size": "s"},
+        {"id": "T12", "title": "OnboardingCoordinator + App entry", "acceptance": "App branches on onboarding.completed. Coordinator switches by currentStep with slide-up transitions.", "files": ["bloom-ios/Sources/Bloom/App.swift","bloom-ios/Sources/Bloom/Onboarding/OnboardingCoordinator.swift","bloom-ios/Sources/Bloom/Home/HomeStubView.swift"], "depends_on": ["T7","T8","T9","T10","T11"], "size": "m"}
+      ]
+    },
+    {
+      "name": "Phase 3 — Polish",
+      "tasks": [
+        {"id": "T13", "title": "Welcome canvas motif + animations", "acceptance": "Canvas-rendered bloom-petal motif on Welcome; slide-up step transitions; button tap feedback animations.", "files": ["bloom-ios/Sources/Bloom/Components/IllustrationView.swift"], "depends_on": ["T12"], "size": "m"},
+        {"id": "T14", "title": "Accessibility pass",       "acceptance": "VoiceOver labels everywhere; ≥44pt tap targets; Dynamic Type Accessibility-XL passes.", "files": ["bloom-ios/Sources/Bloom/Onboarding/*.swift","bloom-ios/Sources/Bloom/Components/*.swift"], "depends_on": ["T12"], "size": "m"},
+        {"id": "T15", "title": "README + build-instructions", "acceptance": "bloom-ios/README.md explains Xcode integration, design tokens, file map.", "files": ["bloom-ios/README.md"], "depends_on": ["T1"], "size": "s"}
+      ]
+    }
+  ]
+}
