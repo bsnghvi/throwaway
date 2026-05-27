@@ -87,6 +87,7 @@ public struct PrivacyView: View {
                 BloomButton("Start my journey", icon: "sparkles") {
                     store.commit()
                 }
+                .accessibilityHint("Completes onboarding and opens the home screen")
             }
             .padding(.horizontal, BloomSpacing.l)
             .padding(.vertical, BloomSpacing.m)

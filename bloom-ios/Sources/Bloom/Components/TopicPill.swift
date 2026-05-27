@@ -18,8 +18,8 @@ public struct TopicPill: View {
         Button(action: onTap) {
             Text(label)
                 .font(BloomFont.label)
-                .lineLimit(1)
-                .fixedSize(horizontal: true, vertical: false)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, BloomSpacing.m)
                 .padding(.vertical, BloomSpacing.s)
                 .frame(minHeight: BloomSpacing.minTapTarget)

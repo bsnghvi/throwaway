@@ -52,6 +52,18 @@ public struct WheelPicker: View {
             .frame(height: 64)
         }
         .accessibilityElement(children: .contain)
+        .accessibilityLabel("Number picker")
+        .accessibilityValue(label(value))
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                if value < range.upperBound { value += 1 }
+            case .decrement:
+                if value > range.lowerBound { value -= 1 }
+            @unknown default:
+                break
+            }
+        }
     }
 }
 

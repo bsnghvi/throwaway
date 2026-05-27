@@ -1,30 +1,20 @@
 import SwiftUI
 
-/// Bloom typography ramp. Sizes are paired with `relativeTo:` so Dynamic
-/// Type scales every text style up to Accessibility-XL without breaking
-/// hierarchy. Weight + leading are tuned for the warm editorial feel of
-/// the brand.
+/// Bloom typography ramp. Every token is built on a `Font.TextStyle`
+/// (e.g. `.largeTitle`, `.body`) so Dynamic Type scaling works for free —
+/// at Accessibility-XL the text ramps up alongside iOS body settings.
+///
+/// Weight + design (serif for headlines, default for body) reinforces the
+/// warm editorial brand feel.
 public enum BloomFont {
-    public static let display = Font.system(size: 40, weight: .semibold, design: .serif)
-        .leading(.tight)
+    public static let display = Font.system(.largeTitle, design: .serif, weight: .semibold)
+    public static let h1 = Font.system(.title, design: .serif, weight: .semibold)
+    public static let h2 = Font.system(.title2, design: .serif, weight: .semibold)
 
-    public static let h1 = Font.system(size: 28, weight: .semibold, design: .serif)
-        .leading(.tight)
-
-    public static let h2 = Font.system(size: 22, weight: .semibold, design: .serif)
-        .leading(.tight)
-
-    public static let body = Font.system(size: 17, weight: .regular, design: .default)
-        .leading(.standard)
-
-    public static let bodyEmphasis = Font.system(size: 17, weight: .semibold, design: .default)
-        .leading(.standard)
-
-    public static let label = Font.system(size: 15, weight: .medium, design: .default)
-        .leading(.standard)
-
-    public static let caption = Font.system(size: 13, weight: .regular, design: .default)
-        .leading(.standard)
+    public static let body = Font.system(.body, design: .default, weight: .regular)
+    public static let bodyEmphasis = Font.system(.body, design: .default, weight: .semibold)
+    public static let label = Font.system(.subheadline, design: .default, weight: .medium)
+    public static let caption = Font.system(.caption, design: .default, weight: .regular)
 }
 
 #if DEBUG

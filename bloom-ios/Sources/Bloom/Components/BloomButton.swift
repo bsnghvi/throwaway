@@ -51,7 +51,7 @@ public struct BloomButton: View {
                 }
                 Text(title)
                     .font(size == .large ? BloomFont.bodyEmphasis : BloomFont.label)
-                    .lineLimit(1)
+                    .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.horizontal, horizontalPadding)

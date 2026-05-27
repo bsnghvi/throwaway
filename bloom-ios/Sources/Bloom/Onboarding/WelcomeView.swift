@@ -36,6 +36,7 @@ public struct WelcomeView: View {
                 BloomButton("Get started", icon: "arrow.right") {
                     store.advance()
                 }
+                .accessibilityHint("Begins the onboarding flow")
                 Text("Takes less than a minute")
                     .font(BloomFont.caption)
                     .foregroundStyle(BloomColor.textTertiary)

@@ -49,8 +49,9 @@ struct OnboardingFooter: View {
     var body: some View {
         HStack(spacing: BloomSpacing.s) {
             BloomButton(backTitle, variant: .text, size: .regular, action: onBack)
-                .frame(maxWidth: 110)
+                .layoutPriority(0)
             BloomButton(continueTitle, isEnabled: continueEnabled, action: onContinue)
+                .layoutPriority(1)
         }
         .padding(.horizontal, BloomSpacing.l)
         .padding(.vertical, BloomSpacing.m)
