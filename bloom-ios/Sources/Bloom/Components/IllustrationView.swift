@@ -2,8 +2,9 @@ import SwiftUI
 import Darwin
 
 /// Abstract bloom-petal motif rendered with `Canvas` — five soft elliptical
-/// petals arranged around a center, optionally slowly rotating. No asset
-/// dependency; T13 will refine the animation curve.
+/// petals arranged around a center. When `isAnimated` is true the petals
+/// slowly rotate and a gentle "breath" scales them by ±4% over a 3.5s
+/// cycle so the welcome screen feels alive without being distracting.
 public struct IllustrationView: View {
     private let isAnimated: Bool
 
@@ -15,8 +16,9 @@ public struct IllustrationView: View {
         TimelineView(.animation(minimumInterval: 1 / 30, paused: !isAnimated)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
             let rotation = isAnimated ? elapsed * 0.18 : 0
+            let breath = isAnimated ? (Darwin.sin(elapsed * 1.8) * 0.04 + 1.0) : 1.0
             Canvas { ctx, size in
-                Self.draw(in: ctx, size: size, rotation: rotation)
+                Self.draw(in: ctx, size: size, rotation: rotation, breath: breath)
             }
         }
         .accessibilityHidden(true)
@@ -25,10 +27,11 @@ public struct IllustrationView: View {
     private static func draw(
         in ctx: GraphicsContext,
         size: CGSize,
-        rotation: Double
+        rotation: Double,
+        breath: Double
     ) {
         let center = CGPoint(x: size.width / 2, y: size.height / 2)
-        let radius = min(size.width, size.height) * 0.32
+        let radius = min(size.width, size.height) * 0.32 * CGFloat(breath)
         let petalCount = 5
 
         for i in 0..<petalCount {
@@ -59,7 +62,11 @@ public struct IllustrationView: View {
             x: center.x + cosA * radius * 0.55,
             y: center.y + sinA * radius * 0.55
         )
+        let petalPath = makePetalPath(at: petalCenter, radius: radius, angle: angle)
+        ctx.fill(petalPath, with: .color(petalColor(index: index).opacity(0.85)))
+    }
 
+    private static func makePetalPath(at petalCenter: CGPoint, radius: CGFloat, angle: Double) -> Path {
         let petalRect = CGRect(
             x: petalCenter.x - radius * 0.55,
             y: petalCenter.y - radius * 0.30,
@@ -72,8 +79,7 @@ public struct IllustrationView: View {
         transform = transform.rotated(by: angle + .pi / 2)
         transform = transform.translatedBy(x: -petalCenter.x, y: -petalCenter.y)
 
-        let petalPath = Path(ellipseIn: petalRect).applying(transform)
-        ctx.fill(petalPath, with: .color(petalColor(index: index).opacity(0.85)))
+        return Path(ellipseIn: petalRect).applying(transform)
     }
 
     private static func petalColor(index: Int) -> Color {
@@ -94,7 +100,7 @@ struct IllustrationView_Previews: PreviewProvider {
                 .padding()
                 .background(BloomColor.background)
                 .preferredColorScheme(.light)
-            IllustrationView(isAnimated: false)
+            IllustrationView(isAnimated: true)
                 .frame(width: 240, height: 240)
                 .padding()
                 .background(BloomColor.background)
